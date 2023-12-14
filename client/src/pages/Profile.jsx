@@ -16,11 +16,10 @@ function Profile() {
     const [filePerc, setFilePerc] = useState(0)
     const [fileUploadError, setFileUploadError] = useState(false);
     const [formData, setFormDate] = useState({})
-    console.log(formData);
 
     useEffect(() => {
         if (file) {
-            handleFileUpload()
+            handleFileUpload(file)
         }
     }, [file]);
 
@@ -52,7 +51,17 @@ function Profile() {
             <h1 className="text-5xl font-semibold my-7 text-center" >Profile</h1>
             <form className="flex flex-col gap-4">
                 <input onChange={(e) => setFile(e.target.files[0])} type="file" ref={fileRef} hidden accept="image/*" />
-                <img onClick={() => fileRef.current.click()} className="rounded-full h-25 w-24 object-cover self-center mt-2" src={currentUser.avatar} alt="profile" />
+                <img onClick={() => fileRef.current.click()} className="rounded-full h-25 w-24 object-cover self-center mt-2" src={formData.avatar || currentUser.avatar} alt="profile" />
+                <p className='text-sm self-center'>{fileUploadError ?
+                    (<span className='text-slate-700'>Error Image Upload</span>) :
+                    filePerc > 0 && filePerc < 100 ?
+                        (<span className='text-green-700'>{`Uploading ${filePerc}%`}</span>) :
+                        filePerc === 100 ?
+                            (<span className='text-green-700'>Image successfully uploaded!</span>)
+                            : (
+                                ''
+                            )}
+                </p>
                 <input type="text" placeholder="username" id="username" className="border p-3 rounded-lg"></input>
                 <input type="email" placeholder="email" id="email" className="border p-3 rounded-lg"></input>
                 <input type="text" placeholder="password" id="password" className="border p-3 rounded-lg"></input>
