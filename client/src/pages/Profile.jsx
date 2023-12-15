@@ -10,6 +10,7 @@ import {
 import { app } from '../firebase';
 import { updateUserStart, updateUserSuccess, updateUserFailure } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom'
 
 function Profile() {
     const fileRef = useRef(null)
@@ -95,6 +96,9 @@ function Profile() {
                 <input type="text" placeholder="username" id="username" defaultValue={currentUser.username} className="border p-3 rounded-lg" onChange={handleChange}></input>
                 <input type="email" placeholder="email" id="email" defaultValue={currentUser.email} className="border p-3 rounded-lg" onChange={handleChange}></input>
                 <input type="text" placeholder="password" id="password" className="border p-3 rounded-lg" onChange={handleChange}></input>
+                <Link className='bg-sky-600 text-white p-3 rounded-lg uppercase text-center hover:opacity-95' to={"/create-submission"}>
+                    New Project
+                </Link>
             </form>
             <div className="flex justify-between mt-5">
                 <span className="text-red-700 cursor-pointer">Delete account</span>
