@@ -27,3 +27,24 @@ export const deleteCasting = async (req, res, next) => {
         next(error);
     }
 }
+
+export const updateCasting = async (req, res, next) => {
+    const casting = await Casting.findById(req.params.id);
+    if (!casting) {
+        return next(errorHandler(404, 'Not Found'));
+    }
+    if (req.user.id !== casting.userRef) {
+        return next(errorHandler(401, "Access Denied"))
+    }
+
+    try {
+        const updatedCasting = await Casting.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.status(200).json(updatedCasting)
+    } catch (error) {
+        next(error)
+    }
+}
