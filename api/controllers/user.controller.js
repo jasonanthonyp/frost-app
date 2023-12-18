@@ -1,5 +1,6 @@
 import bcryptjs from 'bcryptjs';
 import User from '../models/user.model.js';
+import Casting from '../models/casting.model.js';
 
 export const test = (req, res) => {
     res.json({
@@ -27,6 +28,22 @@ export const updateUser = async (req, res, next) => {
         res.status(200).json(rest);
     } catch (error) {
         next(error)
+    }
+
+}
+
+export const getUserCasting = async (req, res, next) => {
+
+    if (req.user.id === req.params.id) {
+        try {
+            const castings = await Casting.find({ userRef: req.user.id });
+            res.status(200).json(castings);
+        } catch (error) {
+            next(error)
+        }
+
+    } else {
+        return next(errorHandler(401, "Access denied"))
     }
 
 }
