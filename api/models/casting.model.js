@@ -14,7 +14,11 @@ const castingSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        union: {
+        sag: {
+            type: Boolean,
+            required: true,
+        },
+        nonunion: {
             type: Boolean,
             required: true,
         },

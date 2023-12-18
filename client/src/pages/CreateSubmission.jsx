@@ -2,15 +2,26 @@ import React from 'react'
 import { useState } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 export default function CreateSubmission() {
-
+    const { currentUser } = useSelector(state => state.user)
+    const navigate = useNavigate();
     const [files, setFiles] = useState([]);
     const [formData, setFormData] = useState({
         imageUrls: [],
+        name: '',
+        agency: '',
+        city: '',
+        sag: false,
+        nonunion: false,
+
     });
     const [imageUploadError, setImageUploadError] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
     console.log(formData);
     const handleImageSubmit = (e) => {
         if (files.length > 0 && files.length + formData.imageUrls.length < 3) {
@@ -67,21 +78,63 @@ export default function CreateSubmission() {
             imageUrls: formData.imageUrls.filter((_, i) => i !== index),
         })
     };
+
+    const handleChange = (e) => {
+        if (e.target.id === 'sag' || e.target.id === 'nonunion') {
+            setFormData({
+                ...formData,
+                [e.target.id]: e.target.checked
+            })
+        }
+        if (e.target.type === 'text') {
+            setFormData({
+                ...formData,
+                [e.target.id]: e.target.value
+            })
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            setLoading(true);
+            setError(false);
+            const res = await fetch('/api/casting/create', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    userRef: currentUser._id,
+                }),
+            });
+            const data = await res.json();
+            setLoading(false);
+            if (data.success === false) {
+                setError(data.message);
+            }
+            navigate(`/casting/${data._id}`);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    }
     return (
         <main className='p-3 max-w-4xl mx-auto'>
             <h1 className='text-3xl font-semibold text-center my-7 text-sky-600'>Create Submission</h1>
-            <form className='flex flex-col sm:flex-row gap-5'>
+            <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-5'>
                 <div className='flex flex-col gap-4 flex-1'>
-                    <input type="text" placeholder="Name" className="border p-3 rounded-lg" id='name' maxLength={62} minLength={10} required />
-                    <input type="text" placeholder="Agency" className="border p-3 rounded-lg" id='agency' required />
-                    <input type="text" placeholder="City" className="border p-3 rounded-lg" id='city' required></input>
+                    <input type="text" placeholder="Name" className="border p-3 rounded-lg" id='name' maxLength={62} minLength={10} required onChange={handleChange} value={formData.name} />
+                    <input type="text" placeholder="Agency" className="border p-3 rounded-lg" id='agency' required onChange={handleChange} value={formData.agency} />
+                    <input type="text" placeholder="City" className="border p-3 rounded-lg" id='city' required onChange={handleChange} value={formData.city} ></input>
                     <div className='flex gap-6 flex-wrap'>
                         <div>
-                            <input type="checkbox" id='union' className='w-5' />
+                            <input type="checkbox" id='sag' className='w-5' onChange={handleChange} value={formData.sag} />
                             <span className='text-sky-600 font-semibold'>Sag/Aftra</span>
                         </div>
                         <div>
-                            <input type="checkbox" id='nonunion' className='w-5' />
+                            <input type="checkbox" id='nonunion' className='w-5' onChange={handleChange} value={formData.nonunion} />
                             <span className='text-sky-600 font-semibold'>Non Union</span>
                         </div>
                     </div>
@@ -103,7 +156,8 @@ export default function CreateSubmission() {
                             </div>
                         ))
                     }
-                    <button className='p-3 bg-sky-600 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>Submit Profile</button>
+                    <button className='p-3 bg-sky-600 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>{loading ? "Submitting..." : "Submit Profile"}</button>
+                    {error && <p className='text-red-700 text-sm'>{error}</p>}
                 </div>
             </form>
         </main>
