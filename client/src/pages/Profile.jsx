@@ -19,6 +19,8 @@ function Profile() {
     const [filePerc, setFilePerc] = useState(0)
     const [fileUploadError, setFileUploadError] = useState(false);
     const [formData, setFormData] = useState({})
+    const [showInfoError, setShowInfoError] = useState(false);
+    const [userInfo, setUserInfo] = useState([]);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -77,6 +79,37 @@ function Profile() {
         }
     };
 
+    const handleShowInfo = async () => {
+        try {
+            setShowInfoError(false);
+            const res = await fetch(`/api/user/castings/${currentUser._id}`);
+            const data = await res.json();
+            if (data.success === false) {
+                setShowInfoError(true);
+                return;
+            }
+            setUserInfo(data);
+        } catch (error) {
+            setShowInfoError(true);
+        }
+    };
+
+    const handleCastingDelete = async (castingId) => {
+        try {
+            const res = await fetch(`/api/casting/delete/${castingId}`, {
+                method: "DELETE",
+            });
+            const data = await res.json();
+            if (data.success === false) {
+                console.log(data.message);
+                return;
+            }
+
+            setUserInfo((prev) => prev.filter((casting) => casting._id !== castingId));
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
     return (
         <div className="p-3 max-w-lg mx-auto bg-zinc-500 rounded-lg">
             <h1 className="text-5xl font-semibold my-7 text-center" >Profile</h1>
@@ -104,6 +137,23 @@ function Profile() {
                 <span className="text-red-700 cursor-pointer">Delete account</span>
                 <span className="text-red-700 cursor-pointer">Sign out</span>
             </div>
+            <button onClick={handleShowInfo} className='text-sky-600 w-full'>Show Info</button>
+            <p className='text-red-700 mt-5'>{showInfoError ? "Error" : ""}</p>
+            {userInfo && userInfo.length > 0 && userInfo.map((casting) =>
+                <div key={casting._id} className="">
+                    <Link to={`/casting/${casting._id}`} >
+                        <div className='flex flex-col'>
+                            <img src={casting.imageUrls[0]} alt='casting image' className="h-50 w-50 object-contain" />
+                            <h1 className="text-black font-bold p-3 mx-auto">{casting.name}</h1>
+                        </div>
+                        <img src={casting.imageUrls[1]} alt='other image' className="h-50 w-50 object-contain" />
+                    </Link>
+                    <div className="flex flex-col p-3">
+                        <button onClick={() => handleCastingDelete(casting._id)} className='text-black uppercase'>Delete</button>
+                        <button className='text-black uppercase'>Edit</button>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
