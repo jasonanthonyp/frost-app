@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
+import { useSelector } from 'react-redux'
 import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
+import Contact from "../components/Contact";
 
 
 export default function Actor() {
@@ -12,7 +14,9 @@ export default function Actor() {
     const [casting, setCasting] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [contact, setContact] = useState(false);
     const params = useParams();
+    const currentUser = useSelector((state) => state.user);
     useEffect(() => {
         const fetchCasting = async () => {
             try {
@@ -34,51 +38,57 @@ export default function Actor() {
         };
         fetchCasting();
     }, [params.castingId]);
-    console.log(loading);
 
-    //     return (
-
-    //         <main>
-    //             {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
-    //             {error && <p className='text-center my-7 text-2xl'>Something went wrong!</p>}
-    //             {casting && !loading && !error && (
-    //                 <div>
-    //                     <div className="flex flex-col uppercase mx-auto">
-    //                         <h1 className="text-white font-bold mx-auto">{casting.name}</h1>
-    //                         <h2 className="text-white mx-auto">{casting.agency}</h2>
-    //                         <h3 className="text-white mx-auto">{casting.city}</h3>
-    //                     </div>
-    //                     <div className="p-3 max-w-lg mx-auto bg-zinc-500 rounded-lg">
-    //                         <img className="h-50 w-50 object-contain" src={casting.imageUrls[0]} />
-    //                         <img className="h-50 w-50 object-contain" src={casting.imageUrls[1]} />
-    //                     </div>
-    //                     <button className="bg-red-700 text-white rounded-lg justify-center w-full">Add to project</button>
-    //                 </div>
-    //             )}
-    //         </main>
-    //     );
-
-    // }
 
     return (
+
         <main>
-            <div className="flex flex-col uppercase mx-auto ">
-                <h1 className="text-white font-bold mx-auto p-3">{casting.name}</h1>
-                <h2 className="text-white mx-auto">{casting.agency}</h2>
-                <h3 className="text-white mx-auto">{casting.city}</h3>
-            </div>
-            <div className="p-5 h-50 w-50 max-w-lg mx-auto">
-                <Swiper navigation>
-                    {casting.imageUrls.map((url) => <SwiperSlide key={url}>
-                        <div className="">
-                            <img src={url} />
-                        </div>
+            {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
+            {error && <p className='text-center my-7 text-2xl'>Something went wrong!</p>}
+            {casting && !loading && !error && (
+                <div className="">
+                    <div className="flex flex-col uppercase mx-auto">
+                        <h1 className="text-white font-bold mx-auto">{casting.name}</h1>
+                        <h2 className="text-white mx-auto">{casting.agency}</h2>
+                        <h3 className="text-white mx-auto">{casting.city}</h3>
+                    </div>
+                    <div className="p-3 max-w-lg mx-auto rounded-lg">
+                        <img className="h-50 w-50 object-contain" src={casting.imageUrls[0]} />
+                        <img className="h-50 w-50 object-contain" src={casting.imageUrls[1]} />
+                        <button className="bg-red-700 text-white rounded-lg hover:opacity-95 p-3">Add to project</button>
+                        {currentUser && casting.userRef !== currentUser._id && !contact && (
+                            <button onClick={() => setContact(true)} className="bg-sky-600 text-white rounded-lg hover:opacity-95 p-3">Contact</button>
+                        )}
+                        {contact && <Contact casting={casting} />}
 
-                    </SwiperSlide>)}
-
-                </Swiper>
-                <button className="bg-red-700 text-white rounded-lg justify-center w-full">Add to project</button>
-            </div>
+                    </div>
+                </div>
+            )}
         </main>
     )
-}
+};
+
+
+
+//     return (
+//         <main>
+//             <div className="flex flex-col uppercase mx-auto">
+//                 <h1 className="text-white font-bold mx-auto">{casting.name}</h1>
+//                 <h2 className="text-white mx-auto">{casting.agency}</h2>
+//                 <h3 className="text-white mx-auto">{casting.city}</h3>
+//             </div>
+//             <div className="p-5 h-50 w-50 max-w-lg mx-auto">
+//                 <Swiper navigation>
+//                     {casting.imageUrls.map((url) => <SwiperSlide key={url}>
+//                         <div className="">
+//                             <img src={url} />
+//                         </div>
+
+//                     </SwiperSlide>)}
+//                 </Swiper>
+//                 <button className="bg-red-700 text-white rounded-lg justify-center w-full">Add to project</button>
+
+//             </div>
+//         </main>
+//     )
+// }
