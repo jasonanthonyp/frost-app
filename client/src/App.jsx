@@ -7,6 +7,7 @@ import About from './pages/About';
 import Header from './components/Header';
 import PrivateRoute from "./components/PrivateRoute";
 import CreateSubmission from "./pages/createSubmission";
+import Actor from "./pages/Actor";
 
 
 
@@ -20,6 +21,7 @@ function App() {
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<SignUp />} />
         <Route path='/about' element={<About />} />
+        <Route path='/casting/:castingId' element={<Actor />} />
         <Route element={<PrivateRoute />} >
           <Route path='/profile' element={<Profile />} />
           <Route path='/create-submission' element={<CreateSubmission />} />

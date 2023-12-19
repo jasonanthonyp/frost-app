@@ -47,4 +47,16 @@ export const updateCasting = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+};
+
+export const getCasting = async (req, res, next) => {
+    try {
+        const casting = await Casting.findById(req.params.id);
+        if (!casting) {
+            return next(errorHandler(404, "Not found"));
+        }
+        res.status(200).json(casting);
+    } catch (error) {
+        next(error);
+    }
 }
