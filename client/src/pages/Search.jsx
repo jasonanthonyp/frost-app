@@ -1,22 +1,87 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Search() {
+    const navigate = useNavigate();
+    const [sidebardata, setSidebardata] = useState({
+        searchTerm: '',
+        sag: false,
+        nonunion: false,
+    });
+
+    const [loading, setLoading] = useState(false);
+    const [castings, setCastings] = useState([]);
+    console.log(castings);
+
+    useEffect(() => {
+
+        const urlParams = new URLSearchParams(location.search);
+        const searchTermFromUrl = urlParams.get('searchTerm');
+        const sagFromUrl = urlParams.get('sag');
+        const nonunionFromUrl = urlParams.get('nonunion');
+
+        if (
+            searchTermFromUrl ||
+            sagFromUrl ||
+            nonunionFromUrl
+        ) {
+            setSidebardata({
+                searchTerm: searchTermFromUrl || '',
+                sag: sagFromUrl || 'true' ? true : false,
+                nonunion: nonunionFromUrl || 'true' ? true : false,
+            });
+        }
+
+
+        const fetchCastings = async () => {
+            setLoading(true);
+            const searchQuery = urlParams.toString();
+            const res = await fetch(`/api/casting/get?${searchQuery}`);
+            const data = await res.json();
+            setCastings(data);
+            setLoading(false);
+
+        };
+
+        fetchCastings();
+    }, [location.search]);
+
+    const handleChange = (e) => {
+        if (e.target.id === 'searchTerm') {
+            setSidebardata({ ...sidebardata, searchTerm: e.target.value });
+        }
+        if (e.target.id === 'sag' || e.target.id === 'nonunion') {
+            setSidebardata({ ...sidebardata, [e.target.id]: e.target.checked || e.target.checked === 'true' ? true : false })
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const urlParams = new URLSearchParams()
+        urlParams.set('searchTerm', sidebardata.searchTerm)
+        urlParams.set('sag', sidebardata.sag)
+        urlParams.set('nonunion', sidebardata.nonunion)
+        const searchQuery = urlParams.toString()
+        navigate(`/search?${searchQuery}`);
+    }
+
     return (
         <div className='flex flex-col md:flex-row'>
             <div className='p-7 border-b-2 md:border-r-2 md:min-h-screen max-w-lg'>
-                <form className='flex flex-col gap-8'>
+                <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
                     <div className='flex items-center gap-2'>
                         <label className='whitespace-nowrap text-white font-semibold'>Search Term:</label>
-                        <input type="text" id='searchTerm' placeholder='Search...' className='border rounded-lg p-3 w-full' />
+                        <input type="text" id='searchTerm' placeholder='Search...' className='border rounded-lg p-3 w-full' value={sidebardata.searchTerm} onChange={handleChange} />
                     </div>
                     <div className='flex gap-2 flex-wrap items-center' >
                         <label className='text-white'>Union:</label>
                         <div className='flex gap-2'>
-                            <input type="checkbox" id="sag" className='w-5' />
+                            <input type="checkbox" id="sag" className='w-5' onChange={handleChange} checked={sidebardata.sag} />
                             <span className='text-white'>SAG/Aftra</span>
                         </div>
                         <div className='flex gap-2'>
-                            <input type="checkbox" id="nonunion" className='w-5' />
+                            <input type="checkbox" id="nonunion" className='w-5' onChange={handleChange} checked={sidebardata.nonunion} />
                             <span className='text-white'>Non Union</span>
                         </div>
                     </div>
