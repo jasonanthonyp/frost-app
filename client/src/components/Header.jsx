@@ -1,11 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 
 function Header() {
     const { currentUser } = useSelector(state => state.user)
+    const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('searchTerm', searchTerm);
+        const searchQuery = urlParams.toString();
+        navigate(`/search?${searchQuery}`);
+    };
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search);
+        const searchTermFromUrl = urlParams.get('searchTerm');
+        if (searchTermFromUrl) {
+            setSearchTerm(searchTermFromUrl);
+        }
+    }, [location.search]);
     return (
         <header className='bg-zinc-900 shadow-md'>
             <div className="flex justify-between items-center p-3">
@@ -14,9 +31,11 @@ function Header() {
                         <span className="text-sky-600">FROST</span>
                     </h1>
                 </Link>
-                <form className="bg-zinc-600 rounded-lg flex items-center p-3">
-                    <input type="text" placeholder="Search..." className='bg-transparent focus:outline-none' />
-                    <FaSearch className="text-zinc-500" />
+                <form onSubmit={handleSubmit} className="bg-zinc-600 rounded-lg flex items-center p-3">
+                    <input type="text" placeholder="Search..." className='bg-transparent focus:outline-none' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                    <button>
+                        <FaSearch className="text-zinc-500" />
+                    </button>
                 </form>
                 <ul className='text-sky-600 flex gap-4'>
                     <Link to='/'>
