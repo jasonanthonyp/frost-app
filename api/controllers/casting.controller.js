@@ -60,3 +60,43 @@ export const getCasting = async (req, res, next) => {
         next(error);
     }
 }
+
+export const getCastings = async (req, res, next) => {
+
+    try {
+
+        const limit = parseInt(req.query.limit) || 9;
+        const startIndex = parseInt(req.query.startIndex) || 0;
+        let sag = req.query.sag;
+
+        if (sag === undefined || sag === 'false') {
+            sag = { $in: [false, true] };
+        };
+
+        let nonunion = req.query.nonunion;
+
+        if (nonunion === undefined || nonunion === 'false') {
+            nonunion = { $in: [false, true] };
+        };
+
+        const searchTerm = req.query.searchTerm || '';
+
+        const sort = req.query.sort || 'createdAt';
+
+        const order = req.query.order || 'desc';
+
+        const castings = await Casting.find({
+            name: { $regex: searchTerm, $options: 'i' },
+            sag,
+            nonunion,
+        }).sort(
+            { [sort]: order }
+        ).limit(limit).skip(startIndex);
+
+        return res.status(200).json(castings);
+
+    } catch (error) {
+        next(error);
+
+    }
+}
