@@ -12,8 +12,7 @@ export default function Search() {
 
     const [loading, setLoading] = useState(false);
     const [castings, setCastings] = useState([]);
-    console.log(castings);
-
+    const [showMore, setShowMore] = useState();
     useEffect(() => {
 
         const urlParams = new URLSearchParams(location.search);
@@ -39,6 +38,11 @@ export default function Search() {
             const searchQuery = urlParams.toString();
             const res = await fetch(`/api/casting/get?${searchQuery}`);
             const data = await res.json();
+            if (data.length > 8) {
+                setShowMore(true);
+            } else {
+                setShowMore(false);
+            }
             setCastings(data);
             setLoading(false);
 
@@ -65,7 +69,21 @@ export default function Search() {
         urlParams.set('nonunion', sidebardata.nonunion)
         const searchQuery = urlParams.toString()
         navigate(`/search?${searchQuery}`);
-    }
+    };
+
+    const onShowMoreClick = async () => {
+        const numberOfCastings = castings.length;
+        const startIndex = numberOfCastings;
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set('startIndex', startIndex);
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/casting/get?${searchQuery}`);
+        const data = await res.json();
+        if (data.length < 9) {
+            setShowMore(false);
+        }
+        setCastings([...castings, ...data]);
+    };
 
     return (
         <div className='flex flex-col md:flex-row'>
@@ -131,6 +149,9 @@ export default function Search() {
                     )}
 
                     {!loading && castings && castings.map((casting) => <ActorItems key={casting._id} casting={casting} />)}
+                    {showMore && (
+                        <button onClick={onShowMoreClick} className='text-sky-600 hover:underlin p-7 text-center w-full'>Show More</button>
+                    )}
                 </div>
             </div>
         </div>
