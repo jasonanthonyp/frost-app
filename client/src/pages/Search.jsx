@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ActorItems from '../components/ActorItems';
 
 export default function Search() {
     const navigate = useNavigate();
@@ -121,6 +122,16 @@ export default function Search() {
             </div>
             <div className=''>
                 <h1 className='text-white text-3xl font-semibold border-b p-3 mt-5'>Results:</h1>
+                <div className='p-7 flex flex-wrap gap-4'>
+                    {!loading && castings.length === 0 && (
+                        <p className='text-xl text-black'>None Found</p>
+                    )}
+                    {loading && (
+                        <p className='text-xl text-black text-center w-full'>Loading...</p>
+                    )}
+
+                    {!loading && castings && castings.map((casting) => <ActorItems key={casting._id} casting={casting} />)}
+                </div>
             </div>
         </div>
     )

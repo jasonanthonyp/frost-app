@@ -31,18 +31,23 @@ function Header() {
                         <span className="text-sky-600">FROST</span>
                     </h1>
                 </Link>
-                <form onSubmit={handleSubmit} className="bg-zinc-600 rounded-lg flex items-center p-3">
-                    <input type="text" placeholder="Search..." className='bg-transparent focus:outline-none' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                    <button>
-                        <FaSearch className="text-zinc-500" />
-                    </button>
-                </form>
+
+                {/* <form onSubmit={handleSubmit} className="bg-zinc-600 rounded-lg flex items-center p-3">
+                        <input type="text" placeholder="Search..." className='bg-transparent focus:outline-none' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                        <button>
+                            <FaSearch className="text-zinc-500" />
+                        </button>
+                    </form> */}
+
                 <ul className='text-sky-600 flex gap-4'>
                     <Link to='/'>
                         <li className="hover:underline">Home</li>
                     </Link>
                     <Link to='/about'>
                         <li className='hover:underline'>About</li>
+                    </Link>
+                    <Link to='/search'>
+                        <li className='hover:underline'>Search</li>
                     </Link>
                     <Link to='/profile'>
                         {currentUser ? (
