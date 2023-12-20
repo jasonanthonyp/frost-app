@@ -25,7 +25,7 @@ function Header() {
     }, [location.search]);
     return (
         <header className='bg-zinc-900 shadow-md'>
-            <div className="flex justify-between items-center p-3">
+            <div className="flex justify-between items-center p-5">
                 <Link to='/'>
                     <h1 className="font-bold flex flex-wrap">
                         <span className="text-sky-600">FROST</span>

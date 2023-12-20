@@ -9,6 +9,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import CreateSubmission from "./pages/createSubmission";
 import Actor from "./pages/Actor";
 import Search from "./pages/Search";
+import Footer from "./components/Footer";
 
 
 
@@ -29,6 +30,7 @@ function App() {
           <Route path='/create-submission' element={<CreateSubmission />} />
         </Route>
       </Routes>
+      <Footer />
     </BrowserRouter>
   )
 }
