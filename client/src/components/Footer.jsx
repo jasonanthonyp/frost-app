@@ -8,8 +8,8 @@ function Footer() {
 
     return (
         <footer className='bg-zinc-900 shadow-md fixed bottom-0 w-full'>
-            <div className="flex justify-between items-center p-5">
-                <ul className='text-sky-600 flex gap-4'>
+            <div className="flex flex-row p-3">
+                <ul className='text-sky-600 flex gap-4 justify-evenly'>
                     <Link to='/'>
                         <li className="hover:underline">Get Representation</li>
                     </Link>

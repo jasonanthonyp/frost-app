@@ -25,10 +25,10 @@ function Header() {
     }, [location.search]);
     return (
         <header className='bg-zinc-900 shadow-md'>
-            <div className="flex justify-between items-center p-5">
+            <div className="flex justify-between items-center p-3">
                 <Link to='/'>
                     <h1 className="font-bold flex flex-wrap">
-                        <span className="text-sky-600">FROST</span>
+                        <span className="text-sky-600 text-3xl hover:scale-90">FROST</span>
                     </h1>
                 </Link>
 

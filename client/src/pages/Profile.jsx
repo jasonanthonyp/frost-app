@@ -111,8 +111,8 @@ function Profile() {
         }
     }
     return (
-        <div className="p-3 max-w-lg mx-auto bg-zinc-500 rounded-lg">
-            <h1 className="text-5xl font-semibold my-7 text-center" >Profile</h1>
+        <div className="p-3 max-w-lg mx-auto">
+            <h1 className="text-5xl font-semibold my-7 text-center text-white" >Welcome, {currentUser.username}</h1>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <input onChange={(e) => setFile(e.target.files[0])} type="file" ref={fileRef} hidden accept="image/*" />
                 <img onClick={() => fileRef.current.click()} className="rounded-full h-25 w-24 object-cover self-center mt-2" src={formData.avatar || currentUser.avatar} alt="profile" />
@@ -128,9 +128,8 @@ function Profile() {
                 </p>
                 <input type="text" placeholder="username" id="username" defaultValue={currentUser.username} className="border p-3 rounded-lg" onChange={handleChange}></input>
                 <input type="email" placeholder="email" id="email" defaultValue={currentUser.email} className="border p-3 rounded-lg" onChange={handleChange}></input>
-                <input type="text" placeholder="password" id="password" className="border p-3 rounded-lg" onChange={handleChange}></input>
                 <Link className='bg-sky-600 text-white p-3 rounded-lg uppercase text-center hover:opacity-95' to={"/create-submission"}>
-                    New Project
+                    Submit Actor
                 </Link>
             </form>
             <div className="flex justify-between mt-5">
@@ -142,16 +141,16 @@ function Profile() {
             {userInfo && userInfo.length > 0 && userInfo.map((casting) =>
                 <div key={casting._id} className="">
                     <Link to={`/casting/${casting._id}`} >
-                        <div className='flex flex-col'>
-                            <img src={casting.imageUrls[0]} alt='casting image' className="h-50 w-50 object-contain" />
-                            <h1 className="text-black font-bold p-3 mx-auto">{casting.name}</h1>
+                        <div className='flex p-3'>
+                            <img src={casting.imageUrls[0]} alt='casting image' className="h-20 w-20 object-contain" />
+                            <img src={casting.imageUrls[1]} alt='other image' className="h-20 w-20 object-contain" />
+                            <h1 className="text-white font-bold p-3 mx-auto">{casting.name}</h1>
                         </div>
-                        <img src={casting.imageUrls[1]} alt='other image' className="h-50 w-50 object-contain" />
                     </Link>
-                    <div className="flex flex-col p-3">
+                    {/* <div className="flex flex-col p-3">
                         <button onClick={() => handleCastingDelete(casting._id)} className='text-black uppercase'>Delete</button>
                         <button className='text-black uppercase'>Edit</button>
-                    </div>
+                    </div> */}
                 </div>
             )}
         </div>

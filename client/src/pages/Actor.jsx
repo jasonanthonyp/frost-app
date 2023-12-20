@@ -15,6 +15,7 @@ export default function Actor() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [contact, setContact] = useState(false);
+    const [frontCard, setFrontCard] = useState(true);
     const params = useParams();
     const currentUser = useSelector((state) => state.user);
     useEffect(() => {
@@ -52,9 +53,13 @@ export default function Actor() {
                         <h2 className="text-white mx-auto">{casting.agency}</h2>
                         <h3 className="text-white mx-auto">{casting.city}</h3>
                     </div>
-                    <div className="p-3 max-w-lg mx-auto rounded-lg">
-                        <img className="h-50 w-50 object-contain" src={casting.imageUrls[0]} />
-                        <img className="h-50 w-50 object-contain" src={casting.imageUrls[1]} />
+                    <div className="flex flex-col p-3 max-w-md mx-auto rounded-lg" onClick={() => setFrontCard(!frontCard)}>
+                        {frontCard ?
+                            <img className="h-50 w-50 object-contain" src={casting.imageUrls[0]} />
+                            :
+
+                            <img className="h-50 w-50 object-contain" src={casting.imageUrls[1]} />
+                        }
                         <button className="bg-red-700 text-white rounded-lg hover:opacity-95 p-3">Add to project</button>
                         {currentUser && casting.userRef !== currentUser._id && !contact && (
                             <button onClick={() => setContact(true)} className="bg-sky-600 text-white rounded-lg hover:opacity-95 p-3">Contact</button>
