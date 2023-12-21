@@ -135,14 +135,14 @@ export default function Search() {
                             <span className='text-white'>Hispanic</span>
                         </div>
                     </div>
-                    <button className='bg-slate-700 text-white uppercase p-3 hover:opacity-95'>Search</button>
+                    <button className='bg-yellow-700 text-white uppercase rounded-lg p-3 hover:opacity-95'>Search</button>
                 </form>
             </div>
             <div className=''>
                 <h1 className='text-white text-3xl font-semibold border-b p-3 mt-5'>Results:</h1>
                 <div className='p-7 flex flex-wrap gap-4'>
                     {!loading && castings.length === 0 && (
-                        <p className='text-xl text-black'>None Found</p>
+                        <p className='text-xl text-yellow-700'>None Found</p>
                     )}
                     {loading && (
                         <p className='text-xl text-black text-center w-full'>Loading...</p>

@@ -9,7 +9,7 @@ function Home() {
                     Cast your next <span className='text-sky-700 font-semibold'>big</span><br />project
                 </h1>
                 <div className='text-sky-700 font-bold text-xs sm:text-sm'>
-                    Chill with Frost: Unleash the Cinematic Magic, Casting Your Newest Film Made Easy.
+                    Chill with Frost: <span className='text-yellow-700'>Unleash the Cinematic Magic</span>, Casting Your Newest Film Made Easy.
                     <br />
                     Find the best Actors to make your dream project a reality.
                 </div>

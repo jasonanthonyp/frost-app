@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
 import { useSelector } from 'react-redux'
@@ -47,11 +47,20 @@ export default function Actor() {
             {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
             {error && <p className='text-center my-7 text-2xl'>Something went wrong!</p>}
             {casting && !loading && !error && (
-                <div className="">
-                    <div className="flex flex-col uppercase mx-auto">
-                        <h1 className="text-white font-bold mx-auto">{casting.name}</h1>
-                        <h2 className="text-white mx-auto">{casting.agency}</h2>
+                <div className="flex flex-row gap-5 justify-center">
+                    <div className="mt-20 p-4">
+                        <h1 className="text-white font-bold text-5xl mx-auto">{casting.name}</h1>
+                        <h2 className="text-yellow-700 font-semibold text-3xl mx-auto">{casting.agency}</h2>
                         <h3 className="text-white mx-auto">{casting.city}</h3>
+                        <div className="flex flex-col items-center gap-2 mt-10 p-3">
+                            {/* <button className="bg-red-700 text-white rounded-lg hover:opacity-95 p-3">Add to project</button> */}
+                            {currentUser && casting.userRef !== currentUser._id && !contact && (
+                                <button onClick={() => setContact(true)} className="bg-sky-600 text-white rounded-lg hover:opacity-95 p-3">Contact</button>
+                            )}
+                            {contact && <Contact casting={casting} />}
+                        </div>
+
+
                     </div>
                     <div className="flex flex-col p-3 max-w-md mx-auto rounded-lg" onClick={() => setFrontCard(!frontCard)}>
                         {frontCard ?
@@ -60,12 +69,6 @@ export default function Actor() {
 
                             <img className="h-50 w-50 object-contain" src={casting.imageUrls[1]} />
                         }
-                        <button className="bg-red-700 text-white rounded-lg hover:opacity-95 p-3">Add to project</button>
-                        {currentUser && casting.userRef !== currentUser._id && !contact && (
-                            <button onClick={() => setContact(true)} className="bg-sky-600 text-white rounded-lg hover:opacity-95 p-3">Contact</button>
-                        )}
-                        {contact && <Contact casting={casting} />}
-
                     </div>
                 </div>
             )}

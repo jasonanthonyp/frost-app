@@ -122,7 +122,7 @@ export default function CreateSubmission() {
     }
     return (
         <main className='p-3 max-w-4xl mx-auto'>
-            <h1 className='text-3xl font-semibold text-center my-7 text-sky-600'>Create Submission</h1>
+            <h1 className='text-5xl font-semibold text-center my-7 text-yellow-700'>Create Submission</h1>
             <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-5'>
                 <div className='flex flex-col gap-4 flex-1'>
                     <input type="text" placeholder="Name" className="border p-3 rounded-lg" id='name' maxLength={62} minLength={10} required onChange={handleChange} value={formData.name} />
@@ -131,11 +131,11 @@ export default function CreateSubmission() {
                     <div className='flex gap-6 flex-wrap'>
                         <div>
                             <input type="checkbox" id='sag' className='w-5' onChange={handleChange} value={formData.sag} />
-                            <span className='text-sky-600 font-semibold'>Sag/Aftra</span>
+                            <span className='text-yellow-700 font-semibold'>Sag/Aftra</span>
                         </div>
                         <div>
                             <input type="checkbox" id='nonunion' className='w-5' onChange={handleChange} value={formData.nonunion} />
-                            <span className='text-sky-600 font-semibold'>Non Union</span>
+                            <span className='text-yellow-700 font-semibold'>Non Union</span>
                         </div>
                     </div>
                 </div>
@@ -145,7 +145,7 @@ export default function CreateSubmission() {
                     </p>
                     <div className='flex gap-4'>
                         <input onChange={(e) => setFiles(e.target.files)} className='p-3 border border-grey-300 bg-gray-300 rounded w-full' type='file' id='images' accept='image/*' multiple />
-                        <button type='button' disabled={uploading} onClick={handleImageSubmit} className='p-3 text-sky-600 border border-sky-600 rounded uppercase hover:shadow-lg disabled:opacity-80'>{uploading ? "Uploading..." : "Upload"}</button>
+                        <button type='button' disabled={uploading} onClick={handleImageSubmit} className='p-3 text-yellow-700 border border-yellow-700 rounded uppercase hover:shadow-lg disabled:opacity-80'>{uploading ? "Uploading..." : "Upload"}</button>
                     </div>
                     <p className='text-red-700 text-sm'>{imageUploadError && imageUploadError}</p>
                     {
